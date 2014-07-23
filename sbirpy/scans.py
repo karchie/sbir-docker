@@ -32,12 +32,15 @@ def get_sessions(xnat, project_id=None, scan_type_filter=None):
             sessions[key][scan[scan_idx]] = scan[type_idx]
     return sessions
 
-    
+def start_freesurfer(xnat, project, subject_label, expt_label, scan):
+    fs_rsrc = xnat.select.project(project).subject(subject_label).experiment(expt_label).resource('FREESURFER')
+    fs_rsrc.insert()
+
 
 parser = argparse.ArgumentParser(description='Talk to XNAT')
-parser.add_argument('--url', help='XNAT base URL')
+parser.add_argument('--xnat', help='XNAT base URL')
 parser.add_argument('--user', help='XNAT login')
-
+parser.add_argument('--docker', help='Docker URL')
 
 args = parser.parse_args()
 
