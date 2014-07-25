@@ -8,16 +8,19 @@ RUN groupadd --gid 91 xnat
 RUN useradd --uid 91 --gid xnat --home-dir /home/xnat xnat
 RUN mkdir -p /home/xnat
 
-ENV HOME /home/xnat
-ENV FREESURFER_HOME /usr/local/freesurfer
-ENV NO_FSFAST true
-
-ADD freesurfer-Linux-centos6_x86_64-stable-pub-v5.3.0.tar.gz /usr/local
-ADD license $FREESURFER_HOME/.license
+# freesurfer now mounted in
+# ADD freesurfer-Linux-centos6_x86_64-stable-pub-v5.3.0.tar.gz /usr/local
+# ADD license $FREESURFER_HOME/.license
 
 ADD bashrc /home/xnat/.bashrc
 
 RUN chown -R xnat.xnat /home/xnat
 
+ENV FREESURFER_HOME /freesurfer
+ENV NO_FSFAST true
+
 USER xnat
-VOLUME ["/data"]
+ENV HOME /home/xnat
+WORKDIR /data
+VOLUME ["/data", "/freesurfer"]
+ENTRYPOINT ["/bin/bash"]
