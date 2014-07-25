@@ -3,9 +3,7 @@
 # Author: Kevin A. Archie <karchie@wustl.edu>
 # Intended to be called by instance user data
 # as:
-# XNAT_CRED=user:pass sh run-docker-jobs.sh PROJECT SUBJECT:EXPT1:SCAN SUBJECT:EXPT2:SCAN ...
-PROJECT=$1
-shift
+# XNAT_CRED=user:pass sh run-docker-jobs.sh PROJECT:SUBJECT:EXPT1:SCAN PROJECT:SUBJECT:EXPT2:SCAN ...
 SCANTUPLES=$@
 
 XNAT_HOST=http://54.210.31.65:8080
@@ -13,9 +11,10 @@ DOCKER_HOST=tcp://0.0.0.0:4243
 export DOCKER_HOST
 
 for scantup in $SCANTUPLES; do
-	SUBJECT=$(echo $scantup | cut -f 1 -d :)
-	EXPERIMENT=$(echo $scantup | cut -f 2 -d :)
-	SCAN=$(echo $scantup | cut -f 3 -d :)
+	PROJECT=$(echo $scantup | cut -f 1 -d :)
+	SUBJECT=$(echo $scantup | cut -f 2 -d :)
+	EXPERIMENT=$(echo $scantup | cut -f 3 -d :)
+	SCAN=$(echo $scantup | cut -f 4 -d :)
 
 	RESOURCE="projects/$PROJECT/subjects/$SUBJECT/experiments/$EXPERIMENT/resources/FREESURFER"
 
