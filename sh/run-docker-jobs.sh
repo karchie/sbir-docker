@@ -18,21 +18,25 @@ for scantup in $SCANTUPLES; do
 
 	RESOURCE="projects/$PROJECT/subjects/$SUBJECT/experiments/$EXPERIMENT/resources/FREESURFER"
 
-	echo docker run -i -v /mnt/nfs/xnat/archive/$PROJECT/arc001/$EXPERIMENT:/data -v /mnt/nfs/tools/freesurfer:/freesurfer sbir/freesurfer <<EOF
+	docker run -i -a stdin -v /mnt/nfs/xnat/archive/$PROJECT/arc001/$EXPERIMENT:/data -v /mnt/nfs/tools/freesurfer:/freesurfer sbir/freesurfer <<EOF
+. /freesurfer/SetUpFreeSurfer.sh
 DICOM_FILE=\$(find /data/SCANS/$SCAN -name '*dcm' -print -quit)
 
-if [-z "\$DICOM_FILE" ]; then
+if [ -z "\$DICOM_FILE" ]; then
     echo Unable to find DICOM file in /data/SCANS/$SCAN - exiting >&2
     exit 1
 fi
 
 curl -X PUT -u "$XNAT_CRED" "$XNAT_HOST/data/$RESOURCE"
-recon-all -sd /data/RESOURCES/FREESURFER -s $SUBJECT -i \$DICOM_FILE
-recon-all -sd /data/RESOURCES/FREESURFER -s $SUBJECT -autorecon1
+recon-all -sd /data/RESOURCES/FREESURFER -s $SUBJECT -i \$DICOM_FILE -autorecon1
 # recon-all -sd /data/RESOURCES/FREESURFER -s $SUBJECT -all
+
+curl -X POST -u "$XNAT_CRED" "$XNAT_HOST/data/services/refresh/catalog?resource=/archive/$RESOURCE&options=append"
+
+exit 0
 EOF
 
-sleep 60						# just doing recon1? stagger only a minute
+sleep 900						# just doing recon1? stagger 15 mins
 done
 
 exit 0
