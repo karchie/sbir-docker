@@ -9,6 +9,8 @@ shift
 SCANTUPLES=$@
 
 XNAT_HOST=http://54.210.31.65:8080
+DOCKER_HOST=tcp://0.0.0.0:4243
+export DOCKER_HOST
 
 for scantup in $SCANTUPLES; do
 	SUBJECT=$(echo $scantup | cut -f 1 -d :)
