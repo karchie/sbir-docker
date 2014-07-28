@@ -22,5 +22,5 @@ ENV NO_FSFAST true
 USER xnat
 ENV HOME /home/xnat
 WORKDIR /data
-VOLUME ["/data", "/freesurfer"]
+VOLUME ["/archive", "/data", "/freesurfer"]
 ENTRYPOINT ["/bin/bash"]
