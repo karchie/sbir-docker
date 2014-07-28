@@ -12,8 +12,6 @@ RUN mkdir -p /home/xnat
 # ADD freesurfer-Linux-centos6_x86_64-stable-pub-v5.3.0.tar.gz /usr/local
 # ADD license $FREESURFER_HOME/.license
 
-ADD bashrc /home/xnat/.bashrc
-
 RUN chown -R xnat.xnat /home/xnat
 
 ENV FREESURFER_HOME /freesurfer
