@@ -45,12 +45,8 @@ def partition(n, iterable, padvalue=None):
     return izip(*[chain(iterable, repeat(padvalue, n-1))]*n)
 
 
-
-# TODO: spin up instance
-# TODO: issue docker request
-
-
 # TODO: snippet like this for evaluating whether a scan rec should get passed to spot_freesurfer
+# except that this is pricy. would be nice if we could bundle the info into the scan search somehow
 #    fs_rsrc = xnat.select.project(project).subject(subject_label).experiment(expt_label).resource('FREESURFER')
 #    if fs_rsrc.exists():
 #        return None
